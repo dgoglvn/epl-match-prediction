@@ -1,30 +1,14 @@
-class Team:
-    def __init__(self, name: str, att_rating: float, def_rating: float) -> None:
-        self.name = name
-        self.att_rating = att_rating
-        self.def_rating = def_rating
+import pandas as pd
+from core.league import League
 
-    # def get_name(self) -> str:
-    #     return self.name
-    #
-    # def set_name(self, name: str) -> None:
-    #     for team in self.df["Team"]:
-    #         if team == name:
-    #             self.name = name
-    #
-    # def get_att_rating(self) -> float:
-    #     return self.att_rating
-    #
-    # def set_att_rating(self, name: str) -> None:
-    #     filtered_df = self.df.loc[self.df["Team"] == name]
-    #     self.att_rating = filtered_df["ATT"].iloc[0]
-    #
-    # def get_def_rating(self) -> float:
-    #     return self.def_rating
-    #
-    # def set_def_rating(self, name: str) -> None:
-    #     filtered_df = self.df.loc[self.df["Team"] == name]
-    #     self.def_rating = filtered_df["DEF"].iloc[0]
+class Team(League):
+    def __init__(self, team_name: str):
+        self.team_name = team_name
 
-    def __repr__(self) -> str:
-        return f"<Team {self.name}: ATT={self.att_rating}, DEF={self.def_rating}>"
+    def get_rating(self):
+        team_ratings_df: pd.DataFrame = self.get_team_ratings()
+        row = team_ratings_df[team_ratings_df["Team"].str.lower() == self.team_name.lower()]
+        if row.empty:
+            raise ValueError(f"Team name '{self.team_name}' not found.")
+
+        return f"{self.team_name}: ATT={row.iloc[0]["ATT"]}, DEF={row.iloc[0]["DEF"]}"

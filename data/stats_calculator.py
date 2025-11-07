@@ -1,21 +1,19 @@
-import math
 import pandas as pd
-
-csv_file: str = "/Users/diego/PycharmProjects/epl-match-prediction/data/Premier League Matchweek 11 Standings 25-26.csv"
-df = pd.read_csv(csv_file)
+from data.data_loader import DataLoader
 
 class StatsCalculator:
-    def __init__(self):
-        pass
+    file_name: str = "data/Premier League Matchweek 11 Standings 25-26.csv"
+    data_loader: DataLoader = DataLoader(file_name)
+    df: pd.DataFrame = data_loader.load_league_table()
 
     @staticmethod
     def compute_league_avg_goals(self) -> float:
         gf_sum = 0
-        for value in df.loc[:, "Pts"]:
+        for value in self.df.loc[:, "Pts"]:
             gf_sum += value
 
         matches_played_sum: int = 0
-        for value in df.loc[:, "MP"]:
+        for value in self.df.loc[:, "MP"]:
             matches_played_sum += value
 
         return gf_sum / matches_played_sum
@@ -25,10 +23,10 @@ class StatsCalculator:
         league_avg_goals: float = self.compute_league_avg_goals(self)
 
         # get team's GF stat
-        teams_gf: int = df.loc[df["Team"] == team, "GF"].iloc[0]
+        teams_gf: int = self.df.loc[self.df["Team"] == team, "GF"].iloc[0]
 
         # get team's number of matches played
-        matches_played: int = df.loc[df["Team"] == team, "MP"].iloc[0]
+        matches_played: int = self.df.loc[self.df["Team"] == team, "MP"].iloc[0]
 
         return round((teams_gf / matches_played) * (1 / league_avg_goals), 3)
 
@@ -37,15 +35,15 @@ class StatsCalculator:
         league_avg_goals: float = self.compute_league_avg_goals(self)
 
         # get team's GA stat
-        teams_ga: int = df.loc[df["Team"] == team, "GA"].iloc[0]
+        teams_ga: int = self.df.loc[self.df["Team"] == team, "GA"].iloc[0]
 
         # get team's number of matches played
-        matches_played: int = df.loc[df["Team"] == team, "MP"].iloc[0]
+        matches_played: int = self.df.loc[self.df["Team"] == team, "MP"].iloc[0]
 
         return round((teams_ga / matches_played) * (1 / league_avg_goals), 3)
 
     def compute_team_ratings(self) -> pd.DataFrame:
-        teams: list[str] = df["Team"].unique().tolist()
+        teams: list[str] = self.df["Team"].unique().tolist()
         results = []
 
         for team in teams:
