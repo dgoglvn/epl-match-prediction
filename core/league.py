@@ -1,3 +1,4 @@
+# league.py
 import pandas as pd
 from data.data_loader import DataLoader
 from data.stats_calculator import StatsCalculator
@@ -23,3 +24,6 @@ class League:
 
     def get_team_ratings(self) -> pd.DataFrame:
         return self.stats_calculator.compute_team_ratings()
+
+    def get_avg_goals(self) -> float:
+        return self.stats_calculator.compute_league_avg_goals()
