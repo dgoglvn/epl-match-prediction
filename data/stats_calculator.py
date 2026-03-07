@@ -1,6 +1,8 @@
 # stats_calculator.py
 import pandas as pd
 from data.data_loader import DataLoader
+
+
 class StatsCalculator:
     def __init__(self) -> None:
         self.file_name: str = "data/Premier League Matchweek 11 Standings 25-26.csv"
@@ -48,15 +50,19 @@ class StatsCalculator:
             att_rating: float = self.compute_att_rating(team)
             def_rating: float = self.compute_def_rating(team)
 
-            results.append({
-                "Team": team,
-                "ATT": att_rating,
-                "DEF": def_rating,
-            })
+            results.append(
+                {
+                    "Team": team,
+                    "ATT": att_rating,
+                    "DEF": def_rating,
+                }
+            )
 
         return pd.DataFrame(results)
 
-    def goal_expectancy(self, home_team_name: str, away_team_name: str) -> tuple[float, float]:
+    def goal_expectancy(
+        self, home_team_name: str, away_team_name: str
+    ) -> tuple[float, float]:
         home_team_att: float = self.compute_att_rating(home_team_name)
         away_team_def: float = self.compute_def_rating(away_team_name)
         league_avg_goals: float = self.compute_league_avg_goals()

@@ -205,3 +205,11 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+.DS_Store
+
+# Ignore all CSV files in this folder
+data/historical/*.csv
+
+# Except the combined dataset
+!data/historical/\*.csv
