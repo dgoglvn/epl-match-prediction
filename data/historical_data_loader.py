@@ -130,6 +130,7 @@ if __name__ == "__main__":
     print(df.columns.tolist())
     print(df.head())
     print(df.tail())
+    print(df["HomeTeam"].unique())
 
     # Write to CSV
-    df.to_csv("data/historical/*.csv", sep=",")
+    # df.to_csv("data/historical/*.csv", sep=",")
