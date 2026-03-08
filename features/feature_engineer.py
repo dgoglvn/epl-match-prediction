@@ -3,6 +3,7 @@ import numpy as np
 from features.form import FormCalculator
 from features.ratings import RatingsCalculator
 from features.goal_diff import GoalDiffCalculator
+from features.win_pct import WinPctCalculator
 
 
 class FeatureEngineer:
@@ -41,6 +42,10 @@ class FeatureEngineer:
         goal_diff = GoalDiffCalculator()
         df = goal_diff.add_goal_diff(df)
 
+        # Win percentage
+        win_pct = WinPctCalculator()
+        df = win_pct.add_win_pct(df)
+
         # Poisson xG (depends on ratings being computed first)
         league_avg = ratings.calculate_league_avg_goals(df)
         df["poisson_home_xg"] = df["home_att"] * df["away_def"] * league_avg
@@ -49,3 +54,38 @@ class FeatureEngineer:
         # Drop rows where features couldn't be computed
         df = df.dropna()
         return df
+
+
+if __name__ == "__main__":
+    from data.historical_data_loader import HistoricalDataLoader
+
+    loader = HistoricalDataLoader("data/historical/")
+    raw_df = loader.load_single_season(2024)
+
+    engineer = FeatureEngineer()
+    featured_df = engineer.build_features(raw_df)
+
+    print(f"Shape: {featured_df.shape}")
+    print(f"Columns: {featured_df.columns}")
+    print(
+        featured_df[
+            [
+                "Date",
+                "HomeTeam",
+                "AwayTeam",
+                "FTR",
+                "home_form_7",
+                "away_form_7",
+                "home_att",
+                "home_def",
+                "away_att",
+                "away_def",
+                "home_goal_diff",
+                "away_goal_diff",
+                "home_win_pct",
+                "away_win_pct",
+                "poisson_home_xg",
+                "poisson_away_xg",
+            ]
+        ].to_string()
+    )

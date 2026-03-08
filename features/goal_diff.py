@@ -23,8 +23,8 @@ class GoalDiffCalculator:
             team (str): Team name.
 
         Returns:
-            pd.DataFrame: DataFrame of the team's matches with an added goal_diff
-            column. First row will be NaN (no prior data).
+            pd.DataFrame: DataFrame of the team's matches with an added GD column.
+            First row will be NaN (no prior data).
         """
         team_matches = df[(df["HomeTeam"] == team) | (df["AwayTeam"] == team)].copy()
 
@@ -58,9 +58,9 @@ class GoalDiffCalculator:
             team_gd = self.compute_team_goal_diff(df, team)
 
             home_mask = team_gd["HomeTeam"] == team
-            df.loc[team_gd.index[home_mask], "home_goal_diff"] = team_gd.loc[home_mask, "goal_diff"].values  # type: ignore
+            df.loc[team_gd.index[home_mask], "home_goal_diff"] = team_gd.loc[home_mask, "GD"].values  # type: ignore
 
             away_mask = team_gd["AwayTeam"] == team
-            df.loc[team_gd.index[away_mask], "away_goal_diff"] = team_gd.loc[away_mask, "goal_diff"].values  # type: ignore
+            df.loc[team_gd.index[away_mask], "away_goal_diff"] = team_gd.loc[away_mask, "GD"].values  # type: ignore
 
         return df
