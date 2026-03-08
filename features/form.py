@@ -40,3 +40,28 @@ class FormCalculator:
 
         team_matches = team_matches.drop(columns=["P"])
         return team_matches
+
+    def add_form(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Add home_form_7 and away_form_7 to the full match DataFrame.
+
+        Args:
+            df (pd.DataFrame): Full match DataFrame.
+
+        Returns:
+            pd.DataFrame: Same DataFrame with two new columns: home_form_7, away_form_7.
+        """
+        df["home_form_7"] = np.nan
+        df["away_form_7"] = np.nan
+
+        # Computing team form for each team for each match
+        for team in df["HomeTeam"].unique():
+            team_form = self.compute_team_form(df, team)
+
+            home_mask = team_form["HomeTeam"] == team
+            df.loc[team_form.index[home_mask], "home_form_7"] = team_form.loc[home_mask, "form_7"].values  # type: ignore
+
+            away_mask = team_form["AwayTeam"] == team
+            df.loc[team_form.index[away_mask], "away_form_7"] = team_form.loc[away_mask, "form_7"].values  # type: ignore
+
+        return df
