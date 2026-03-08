@@ -1,44 +1,59 @@
-# main.py
-from data.stats_calculator import StatsCalculator
-from core.league import League
-from core.team import Team
-from models.poisson_model import PoissonModel
+from sklearn.ensemble import RandomForestClassifier
+from data.historical_data_loader import HistoricalDataLoader
+from features.feature_engineer import FeatureEngineer
+
 
 def main() -> None:
-    league: League = League()
-    avg_goals: float = league.get_avg_goals()
-    print(f"League average goals per team per match: {avg_goals}")
+    FEATURE_COLUMNS = [
+        "home_form_7",
+        "away_form_7",
+        "home_att",
+        "home_def",
+        "away_att",
+        "away_def",
+        "home_goal_diff",
+        "away_goal_diff",
+        "home_win_pct",
+        "away_win_pct",
+        "poisson_home_xg",
+        "poisson_away_xg",
+    ]
 
-    stats: StatsCalculator = StatsCalculator()
+    # Load data
+    loader = HistoricalDataLoader("data/historical/")
+    raw_df = loader.load_all_seasons()
 
-    home_team: Team = Team("Sunderland")
-    away_team: Team = Team("Arsenal")
+    # Build features
+    engineer = FeatureEngineer()
+    featured_df = engineer.build_features(raw_df)
 
-    # expected goals based on ATT/DEF and league averages
-    home_xg, away_xg = stats.goal_expectancy(home_team.get_team_name(), away_team.get_team_name())
+    # Chronological train/test split
+    train_df = featured_df[featured_df["Season"] < "2023-24"]
+    test_df = featured_df[featured_df["Season"] >= "2023-24"]
 
-    print("\nExpected goals (xG):")
-    print(f"{home_team.get_team_name()}: {home_xg}")
-    print(f"{away_team.get_team_name()}: {away_xg}")
+    # Prepare X and y
+    X_train = train_df[FEATURE_COLUMNS]
+    y_train = train_df["FTR"]
 
-    # use Poisson model to get win/draw/loss probabilities
-    model: PoissonModel = PoissonModel()
-    probs = model.win_probabilities_by_goals(home_xg, away_xg)
+    X_test = test_df[FEATURE_COLUMNS]
+    y_test = test_df["FTR"]
 
-    print("\nOverall match outcome probabilities:")
-    print(f"{home_team.get_team_name()} win: {round(probs['home_win'], 2) * 100}%")
-    print(f"Draw: {round(probs['draw'], 2) * 100}%")
-    print(f"{away_team.get_team_name()} win: {round(probs['away_win'], 2) * 100}%")
+    print(f"Train: {X_train.shape}, Test: {X_test.shape}")
+    print(f"Train seasons: {train_df['Season'].unique()}")
+    print(f"Test seasons: {test_df['Season'].unique()}")
 
-    print("\nBreakdown - home team wins by exact goals scored:")
-    for goals, p in probs["home_by_goals"].items():
-        if p > 0:
-            print(f"{home_team.get_team_name()} scores {goals}: {p:.3%} chance of winning")
+    rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
 
-    print("\nBreakdown - away team wins by exact goals scored:")
-    for goals, p in probs["away_by_goals"].items():
-        if p > 0:
-            print(f"{away_team.get_team_name()} scores {goals}: {p:.3%} chance of winning")
+    # Train (fit) the model on the training data
+    rf_model.fit(X_train, y_train)
+
+    # Make predictions on the test data
+    predictions = rf_model.predict(X_test)
+
+    # Calculate accuracy
+    accuracy = rf_model.score(X_test, y_test)
+    print(f"Model accuracy: {accuracy:.2f}")
+
 
 if __name__ == "__main__":
     main()

@@ -60,32 +60,32 @@ if __name__ == "__main__":
     from data.historical_data_loader import HistoricalDataLoader
 
     loader = HistoricalDataLoader("data/historical/")
-    raw_df = loader.load_single_season(2024)
+    raw_df = loader.load_all_seasons()
 
     engineer = FeatureEngineer()
     featured_df = engineer.build_features(raw_df)
 
     print(f"Shape: {featured_df.shape}")
     print(f"Columns: {featured_df.columns}")
-    print(
-        featured_df[
-            [
-                "Date",
-                "HomeTeam",
-                "AwayTeam",
-                "FTR",
-                "home_form_7",
-                "away_form_7",
-                "home_att",
-                "home_def",
-                "away_att",
-                "away_def",
-                "home_goal_diff",
-                "away_goal_diff",
-                "home_win_pct",
-                "away_win_pct",
-                "poisson_home_xg",
-                "poisson_away_xg",
-            ]
-        ].to_string()
-    )
+    # print(
+    #     featured_df[
+    #         [
+    #             "Date",
+    #             "HomeTeam",
+    #             "AwayTeam",
+    #             "FTR",
+    #             "home_form_7",
+    #             "away_form_7",
+    #             "home_att",
+    #             "home_def",
+    #             "away_att",
+    #             "away_def",
+    #             "home_goal_diff",
+    #             "away_goal_diff",
+    #             "home_win_pct",
+    #             "away_win_pct",
+    #             "poisson_home_xg",
+    #             "poisson_away_xg",
+    #         ]
+    #     ].to_string()
+    # )
