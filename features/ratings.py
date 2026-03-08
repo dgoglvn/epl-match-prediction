@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 
-class Ratings_Calculator:
+class RatingsCalculator:
     """
     Computes cumulative ATT and DEF ratings for each team at each matchday.
 

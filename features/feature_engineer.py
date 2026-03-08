@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
-from features.form import Form_Calculator
-from features.ratings import Ratings_Calculator
+from features.form import FormCalculator
+from features.ratings import RatingsCalculator
+from features.goal_diff import GoalDiffCalculator
 
 
 class FeatureEngineer:
@@ -10,7 +11,7 @@ class FeatureEngineer:
     """
 
     def __init__(self) -> None:
-        self.form = Form_Calculator()
+        self.form = FormCalculator()
 
     def add_form(self, df: pd.DataFrame) -> pd.DataFrame:
         df["home_form_7"] = np.nan
@@ -33,8 +34,12 @@ class FeatureEngineer:
         df = self.add_form(df)
 
         # ATT/DEF ratings
-        ratings = Ratings_Calculator(df)
+        ratings = RatingsCalculator(df)
         df = ratings.add_ratings(df)
+
+        # Goal differential
+        goal_diff = GoalDiffCalculator()
+        df = goal_diff.add_goal_diff(df)
 
         # Poisson xG (depends on ratings being computed first)
         league_avg = ratings.calculate_league_avg_goals(df)
@@ -43,5 +48,4 @@ class FeatureEngineer:
 
         # Drop rows where features couldn't be computed
         df = df.dropna()
-
         return df

@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 
-class Form_Calculator:
+class FormCalculator:
     def compute_team_form(self, df: pd.DataFrame, team: str) -> pd.DataFrame:
         """
         For each match, look at the previous 7 matches to compute form.
