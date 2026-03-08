@@ -30,7 +30,13 @@ class FormCalculator:
                 team_matches.at[idx, "P"] = 0
 
         # For each match, look at the previous 7 games to compute form
-        team_matches["form_7"] = team_matches["P"].rolling(7).sum()
-        team_matches = team_matches.drop(columns=["P"])
+        team_matches["form_7"] = (
+            team_matches.groupby("Season")[
+                "P"
+            ]  # Groups by season so form doesn't carry over to the next
+            .apply(lambda x: x.rolling(7).sum())
+            .reset_index(level=0, drop=True)
+        )
 
+        team_matches = team_matches.drop(columns=["P"])
         return team_matches

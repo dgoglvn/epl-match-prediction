@@ -29,6 +29,11 @@ class WinPctCalculator:
                 team_matches.at[idx, "wins"] = 0
 
         team_matches["WPct"] = team_matches["wins"].expanding().mean().shift(1)
+        team_matches["WPct"] = (
+            team_matches.groupby("Season")["wins"]
+            .apply(lambda x: x.expanding().mean().shift(1))
+            .reset_index(level=0, drop=True)
+        )
 
         return team_matches
 

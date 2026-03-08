@@ -86,8 +86,18 @@ class RatingsCalculator:
         )
 
         # Get cumulative goals and goals conceded per game
-        team_matches["gf_per_game"] = team_matches["GF"].expanding().mean().shift(1)
-        team_matches["ga_per_game"] = team_matches["GA"].expanding().mean().shift(1)
+        # team_matches["gf_per_game"] = team_matches["GF"].expanding().mean().shift(1)
+        # team_matches["ga_per_game"] = team_matches["GA"].expanding().mean().shift(1)
+        team_matches["gf_per_game"] = (
+            team_matches.groupby("Season")["GF"]
+            .apply(lambda x: x.expanding().mean().shift(1))
+            .reset_index(level=0, drop=True)
+        )
+        team_matches["ga_per_game"] = (
+            team_matches.groupby("Season")["GA"]
+            .apply(lambda x: x.expanding().mean().shift(1))
+            .reset_index(level=0, drop=True)
+        )
 
         league_avg = self.calculate_league_avg_goals(self.df)
         team_matches["ATT"] = team_matches["gf_per_game"] / league_avg

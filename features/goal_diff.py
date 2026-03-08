@@ -35,8 +35,12 @@ class GoalDiffCalculator:
             team_matches["HomeTeam"] == team, team_matches["FTAG"], team_matches["FTHG"]
         )
 
+        team_matches["GF_minus_GA"] = team_matches["GF"] - team_matches["GA"]
+
         team_matches["GD"] = (
-            (team_matches["GF"] - team_matches["GA"]).expanding().sum().shift(1)
+            team_matches.groupby("Season")["GF_minus_GA"]
+            .apply(lambda x: x.expanding().sum().shift(1))
+            .reset_index(level=0, drop=True)
         )
 
         return team_matches
