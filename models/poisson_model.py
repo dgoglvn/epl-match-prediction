@@ -2,12 +2,14 @@
 import math
 from typing import Dict, List, TypedDict
 
+
 class WinProbabilities(TypedDict):
     home_by_goals: Dict[int, float]
     away_by_goals: Dict[int, float]
     home_win: float
     draw: float
     away_win: float
+
 
 class PoissonModel:
     def __init__(self, max_goals: int = 10) -> None:
@@ -17,11 +19,10 @@ class PoissonModel:
         # return P(X = k) for k = 0..max_goals for a Poisson(lambda) random variable
         return [self.poisson_pmf(k, lam) for k in range(self.max_goals + 1)]
 
-
     def win_probabilities_by_goals(
-            self,
-            home_team_xg: float,
-            away_team_xg: float,
+        self,
+        home_team_xg: float,
+        away_team_xg: float,
     ) -> WinProbabilities:
         # distributions P(X = k) and P(Y = k) for k = 0..max_goals
         home_goal_probs: List[float] = self._goal_distribution(home_team_xg)
@@ -46,7 +47,9 @@ class PoissonModel:
 
         total_home_win: float = sum(home_by_goals.values())
         total_away_win: float = sum(away_by_goals.values())
-        total_draw: float = sum(home_goal_probs[g] * away_goal_probs[g] for g in range(self.max_goals + 1))
+        total_draw: float = sum(
+            home_goal_probs[g] * away_goal_probs[g] for g in range(self.max_goals + 1)
+        )
 
         # tiny numerical/truncation errors can make the sum slightly != 1
         total_mass: float = total_home_win + total_away_win + total_draw
