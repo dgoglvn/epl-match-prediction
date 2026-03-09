@@ -1,7 +1,5 @@
 # EPL Match Outcome Predictor
 
-predicting the premier league matches for the 2025/26 season
-
 A machine learning system that predicts English Premier League match outcomes (Home Win, Draw, Away Win) using a Random Forest classifier combined with a Poisson model.
 
 Based on two research papers:
