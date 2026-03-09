@@ -1,15 +1,16 @@
+import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import (
-    confusion_matrix,
     ConfusionMatrixDisplay,
     classification_report,
+    confusion_matrix,
 )
-import matplotlib.pyplot as plt
+from sklearn.model_selection import GridSearchCV
+
 from data.historical_data_loader import HistoricalDataLoader
 from features.feature_engineer import FeatureEngineer
-from models.hybrid_predictor import HybridPredictor
 from features.ratings import RatingsCalculator
+from models.hybrid_predictor import HybridPredictor
 
 
 class RandomForestModel:
@@ -56,11 +57,6 @@ class RandomForestModel:
         X_test = test_df[self.FEATURE_COLUMNS]
         y_test = test_df["FTR"]
 
-        # print(f"Train: {X_train.shape}, Test: {X_test.shape}")
-        # print(f"Train seasons: {train_df['Season'].unique()}")
-        # print(f"Test seasons: {test_df['Season'].unique()}")
-        # print(f"\n{X_test[["home_att", "away_def", "home_def", "away_att"]]}")
-
         # ========== BASE MODEL ==========
         print("\n========== BASE MODEL ==========")
 
@@ -68,9 +64,6 @@ class RandomForestModel:
 
         # Train (fit) the model on the training data
         rf_model.fit(X_train, y_train)
-
-        rf_probs = rf_model.predict_proba(X_test)
-        rf_predictions = rf_model.predict(X_test)
 
         accuracy = rf_model.score(X_test, y_test)
         print(f"Base model accuracy: {accuracy:.2f}")
