@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 
 class RatingsCalculator:
@@ -85,9 +84,6 @@ class RatingsCalculator:
             team_matches["HomeTeam"] == team, team_matches["FTAG"], team_matches["FTHG"]
         )
 
-        # Get cumulative goals and goals conceded per game
-        # team_matches["gf_per_game"] = team_matches["GF"].expanding().mean().shift(1)
-        # team_matches["ga_per_game"] = team_matches["GA"].expanding().mean().shift(1)
         team_matches["gf_per_game"] = (
             team_matches.groupby("Season")["GF"]
             .apply(lambda x: x.expanding().mean().shift(1))
