@@ -3,6 +3,9 @@ import numpy as np
 
 
 class WinPctCalculator:
+    """
+    Computes win percentages for each team (home and away) per match.
+    """
     def compute_win_pct(self, df: pd.DataFrame, team: str) -> pd.DataFrame:
         """
         Computes win percentage for a single team.
