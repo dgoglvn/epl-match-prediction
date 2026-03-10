@@ -1,5 +1,5 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 
 class GoalDiffCalculator:
@@ -62,9 +62,13 @@ class GoalDiffCalculator:
             team_gd = self.compute_team_goal_diff(df, team)
 
             home_mask = team_gd["HomeTeam"] == team
-            df.loc[team_gd.index[home_mask], "home_goal_diff"] = team_gd.loc[home_mask, "GD"].values  # type: ignore
+            df.loc[team_gd.index[home_mask], "home_goal_diff"] = team_gd.loc[
+                home_mask, "GD"
+            ].values  # type: ignore
 
             away_mask = team_gd["AwayTeam"] == team
-            df.loc[team_gd.index[away_mask], "away_goal_diff"] = team_gd.loc[away_mask, "GD"].values  # type: ignore
+            df.loc[team_gd.index[away_mask], "away_goal_diff"] = team_gd.loc[
+                away_mask, "GD"
+            ].values  # type: ignore
 
         return df

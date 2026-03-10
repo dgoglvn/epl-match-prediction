@@ -1,6 +1,6 @@
-import pandas as pd
-import numpy as np
 import os
+
+import pandas as pd
 
 
 class HistoricalDataLoader:
@@ -104,8 +104,7 @@ class HistoricalDataLoader:
         """
         all_dfs = []
 
-        # for year in range(1993, 2026)
-        for year in range(1993, 2025):
+        for year in range(2000, 2026):
             df = self.load_single_season(year)
             all_dfs.append(df)
 
@@ -131,6 +130,3 @@ if __name__ == "__main__":
     print(df.head())
     print(df.tail())
     print(df["HomeTeam"].unique())
-
-    # Write to CSV
-    # df.to_csv("data/historical/*.csv", sep=",")

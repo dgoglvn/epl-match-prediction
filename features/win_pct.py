@@ -1,11 +1,12 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 
 class WinPctCalculator:
     """
     Computes win percentages for each team (home and away) per match.
     """
+
     def compute_win_pct(self, df: pd.DataFrame, team: str) -> pd.DataFrame:
         """
         Computes win percentage for a single team.
@@ -48,9 +49,13 @@ class WinPctCalculator:
             team_wpct = self.compute_win_pct(df, team)
 
             home_mask = team_wpct["HomeTeam"] == team
-            df.loc[team_wpct.index[home_mask], "home_win_pct"] = team_wpct.loc[home_mask, "WPct"].values  # type: ignore
+            df.loc[team_wpct.index[home_mask], "home_win_pct"] = team_wpct.loc[
+                home_mask, "WPct"
+            ].values  # type: ignore
 
             away_mask = team_wpct["AwayTeam"] == team
-            df.loc[team_wpct.index[away_mask], "away_win_pct"] = team_wpct.loc[away_mask, "WPct"].values  # type: ignore
+            df.loc[team_wpct.index[away_mask], "away_win_pct"] = team_wpct.loc[
+                away_mask, "WPct"
+            ].values  # type: ignore
 
         return df

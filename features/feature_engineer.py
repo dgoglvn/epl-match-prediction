@@ -1,6 +1,8 @@
 import pandas as pd
+
 from features.form import FormCalculator
 from features.goal_diff import GoalDiffCalculator
+from features.ratings import RatingsCalculator
 from features.win_pct import WinPctCalculator
 
 

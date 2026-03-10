@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 
@@ -130,11 +131,19 @@ class RatingsCalculator:
             team_ratings = self.compute_team_ratings(team)
 
             home_mask = team_ratings["HomeTeam"] == team
-            df.loc[team_ratings.index[home_mask], "home_att"] = team_ratings.loc[home_mask, "ATT"].values  # type: ignore
-            df.loc[team_ratings.index[home_mask], "home_def"] = team_ratings.loc[home_mask, "DEF"].values  # type: ignore
+            df.loc[team_ratings.index[home_mask], "home_att"] = team_ratings.loc[
+                home_mask, "ATT"
+            ].values  # type: ignore
+            df.loc[team_ratings.index[home_mask], "home_def"] = team_ratings.loc[
+                home_mask, "DEF"
+            ].values  # type: ignore
 
             away_mask = team_ratings["AwayTeam"] == team
-            df.loc[team_ratings.index[away_mask], "away_att"] = team_ratings.loc[away_mask, "ATT"].values  # type: ignore
-            df.loc[team_ratings.index[away_mask], "away_def"] = team_ratings.loc[away_mask, "DEF"].values  # type: ignore
+            df.loc[team_ratings.index[away_mask], "away_att"] = team_ratings.loc[
+                away_mask, "ATT"
+            ].values  # type: ignore
+            df.loc[team_ratings.index[away_mask], "away_def"] = team_ratings.loc[
+                away_mask, "DEF"
+            ].values  # type: ignore
 
         return df

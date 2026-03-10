@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 
@@ -5,6 +6,7 @@ class FormCalculator:
     """
     Computes form for each team in a match based on their previous 7 matches.
     """
+
     def compute_team_form(self, df: pd.DataFrame, team: str) -> pd.DataFrame:
         """
         For each match, look at the previous 7 matches to compute form.
@@ -61,9 +63,13 @@ class FormCalculator:
             team_form = self.compute_team_form(df, team)
 
             home_mask = team_form["HomeTeam"] == team
-            df.loc[team_form.index[home_mask], "home_form_7"] = team_form.loc[home_mask, "form_7"].values  # type: ignore
+            df.loc[team_form.index[home_mask], "home_form_7"] = team_form.loc[
+                home_mask, "form_7"
+            ].values  # type: ignore
 
             away_mask = team_form["AwayTeam"] == team
-            df.loc[team_form.index[away_mask], "away_form_7"] = team_form.loc[away_mask, "form_7"].values  # type: ignore
+            df.loc[team_form.index[away_mask], "away_form_7"] = team_form.loc[
+                away_mask, "form_7"
+            ].values  # type: ignore
 
         return df
