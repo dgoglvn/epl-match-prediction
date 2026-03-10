@@ -1,8 +1,10 @@
 import pandas as pd
-import numpy as np
 
 
 class FormCalculator:
+    """
+    Computes form for each team in a match based on their previous 7 matches.
+    """
     def compute_team_form(self, df: pd.DataFrame, team: str) -> pd.DataFrame:
         """
         For each match, look at the previous 7 matches to compute form.
