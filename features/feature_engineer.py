@@ -1,7 +1,5 @@
 import pandas as pd
-import numpy as np
 from features.form import FormCalculator
-from features.ratings import RatingsCalculator
 from features.goal_diff import GoalDiffCalculator
 from features.win_pct import WinPctCalculator
 
